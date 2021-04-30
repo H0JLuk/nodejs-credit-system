@@ -18,6 +18,10 @@ authService.login = async ({ username, password }) => {
 }
 
 authService.registration = async ({ username, password, firstName, middleName, lastName, img }) => {
+  if (!username || !password || !firstName || !middleName || !lastName) {
+    throw { code: 400, message: 'Invalid data' }
+  }
+
   const existingUser = null
   // await User.findOne({ where: { username } })
   if (existingUser) {
@@ -26,7 +30,7 @@ authService.registration = async ({ username, password, firstName, middleName, l
 
   const hashedPassword = await hashPassword(password)
 
-  const createdUser = { id: new Date.toString(), username, firstName, middleName, lastName, img }
+  const createdUser = { id: new Date().toISOString(), username, firstName, middleName, lastName, img }
   /*await User.create({ })*/
   return createdUser
 }

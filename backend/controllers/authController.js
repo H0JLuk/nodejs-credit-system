@@ -14,11 +14,11 @@ authController.login = async (req, res) => {
 }
 
 authController.registration = async (req, res) => {
-  const { username, password, first_name, middle_name, last_name, img } = req.body
+  const { username, password, firstName, middleName, lastName, img } = req.body
 
   try {
-    const response = await authService.registration({ username, password, first_name, middle_name, last_name, img })
-    res.status(201).json(response)
+    const response = await authService.registration({ username, password, firstName, middleName, lastName, img })
+    res.status(200).json(response)
   } catch (err) {
     res.status(err.code).json({ message: err.message })
   }
