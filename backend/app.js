@@ -4,6 +4,8 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 
+require('./config')
+
 const { verifyToken } = require('./middleware/auth')
 const authRouter = require('./routers/authRouter')
 

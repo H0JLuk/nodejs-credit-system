@@ -6,7 +6,7 @@ authService.login = async ({ username, password }) => {
   const user = {}
   // await User.findOne({ where: { username } })
 
-  const isValidPassword = await comparePasswords(password, user.password)
+  const isValidPassword = await comparePasswords(password, user?.password || '')
 
   if (!isValidPassword) {
     throw { code: 401, message: 'Invalid email or password' }
