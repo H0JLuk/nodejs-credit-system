@@ -4,6 +4,7 @@ const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
 
+const { verifyToken } = require('./middleware/auth')
 const authRouter = require('./routers/authRouter')
 
 const app = express()
@@ -19,6 +20,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/auth', authRouter)
+app.use('/test', verifyToken, (req, res) => res.json({ message: 'success' }))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
