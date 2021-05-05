@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { isValidUsername, isValidPassword } = require('../helpers/validators/auth')
+const { isValidUsername, isValidPassword } = require('../helpers/validators')
 
 function verifyToken(req, res, next) {
   const header = req.headers['authorization']
@@ -22,10 +22,9 @@ function verifyToken(req, res, next) {
 function verifyLoginRoute(req, res, next) {
   const { username, password } = req.body
 
-  if (!isValidUsername(username) || !isValidPassword(password)) {
-    return res.status(400).end()
-  }
-  next()
+  const isValid = isValidUsername(username) && isValidPassword(password)
+
+  isValid ? next() : res.status(400).end()
 }
 
 function verifyRegisterRoute(req, res, next) {
@@ -34,10 +33,7 @@ function verifyRegisterRoute(req, res, next) {
 
   const isValid = isValidUsername(username) && isValidPassword(password) && names.every((name) => name.length >= 3)
 
-  if (!isValid) {
-    return res.status(400).end()
-  }
-  next()
+  isValid ? next() : res.status(400).end()
 }
 
 module.exports = { verifyToken, verifyLoginRoute, verifyRegisterRoute }
