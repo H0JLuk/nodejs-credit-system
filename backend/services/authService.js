@@ -1,10 +1,10 @@
 const { comparePasswords, hashPassword, signAccessToken } = require('../helpers')
+const User = require('../models/user')
 
 const authService = {}
 
 authService.login = async ({ username, password }) => {
-  const user = {}
-  // await User.findOne({ where: { username } })
+  const user = await User.findOne({ username })
 
   const isValidPassword = await comparePasswords(password, user?.password || '')
 
@@ -18,21 +18,24 @@ authService.login = async ({ username, password }) => {
 }
 
 authService.registration = async ({ username, password, firstName, middleName, lastName, img }) => {
-  if (!username || !password || !firstName || !middleName || !lastName) {
-    throw { code: 400, message: 'Invalid data' }
-  }
+  const existingUser = await User.findOne({ username })
 
-  const existingUser = null
-  // await User.findOne({ where: { username } })
   if (existingUser) {
     throw { code: 401, message: 'User already exist' }
   }
 
   const hashedPassword = await hashPassword(password)
+  const createdUser = await User.create({
+    username,
+    password: hashedPassword,
+    firstName,
+    middleName,
+    lastName,
+    img,
+  })
+  const { _id: id } = createdUser.toObject()
 
-  const createdUser = { id: new Date().toISOString(), username, firstName, middleName, lastName, img }
-  /*await User.create({ })*/
-  return createdUser
+  return { id, username, firstName, middleName, lastName, img }
 }
 
 module.exports = authService

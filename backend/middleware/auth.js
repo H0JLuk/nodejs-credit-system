@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken')
+const { isValidUsername, isValidPassword } = require('../helpers/validators/auth')
 
 function verifyToken(req, res, next) {
   const header = req.headers['authorization']
@@ -10,7 +11,7 @@ function verifyToken(req, res, next) {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, data) => {
     if (err) {
-      return res.status(404).json({ message: 'Access denied' })
+      return res.status(401).json({ message: 'Access denied' })
     }
 
     req.user = data
@@ -18,4 +19,25 @@ function verifyToken(req, res, next) {
   })
 }
 
-module.exports = { verifyToken }
+function verifyLoginRoute(req, res, next) {
+  const { username, password } = req.body
+
+  if (!isValidUsername(username) || !isValidPassword(password)) {
+    return res.status(400).end()
+  }
+  next()
+}
+
+function verifyRegisterRoute(req, res, next) {
+  const { username, password, firstName, middleName, lastName } = req.body
+  const names = [firstName, middleName, lastName] // TODO: implement image checking
+
+  const isValid = isValidUsername(username) && isValidPassword(password) && names.every((name) => name.length >= 3)
+
+  if (!isValid) {
+    return res.status(400).end()
+  }
+  next()
+}
+
+module.exports = { verifyToken, verifyLoginRoute, verifyRegisterRoute }
