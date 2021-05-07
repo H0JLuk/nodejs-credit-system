@@ -26,10 +26,14 @@ const comparePasswords = (plainPassword, hashPassword) => {
     })
   })
 }
+
 const signAccessToken = (data = {}, expiresIn = '1y') => jwt.sign(data, process.env.JWT_SECRET, { expiresIn })
+
+const generateUnicCode = () => Math.random().toString(36).substr(2, 9)
 
 module.exports = {
   hashPassword,
   comparePasswords,
   signAccessToken,
+  generateUnicCode,
 }

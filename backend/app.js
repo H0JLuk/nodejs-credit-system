@@ -7,8 +7,8 @@ const logger = require('morgan')
 require('./config')
 require('./db/connection')
 
-const { verifyToken } = require('./middleware/auth')
 const authRouter = require('./routers/authRouter')
+const creditRouter = require('./routers/creditRouter')
 
 const app = express()
 
@@ -23,7 +23,7 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/auth', authRouter)
-app.use('/test', verifyToken, (req, res) => res.json({ message: 'success' }))
+app.use('/credit', creditRouter)
 
 app.use(function (req, res, next) {
   next(createError(404))
