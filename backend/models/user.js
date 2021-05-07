@@ -1,30 +1,30 @@
 const { Schema, model } = require('mongoose')
 
+const trimStringType = {
+  type: Schema.Types.String,
+  trim: true,
+  required: false,
+}
+
+const requiredTrimStringType = {
+  ...trimStringType,
+  required: true,
+}
+
 const schema = new Schema({
-  username: {
-    type: String,
+  email: requiredTrimStringType,
+  password: requiredTrimStringType,
+  isSubmittedEmail: {
+    type: Schema.Types.Boolean,
     required: true,
+    default: false,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  firstName: {
-    type: String,
-    required: true,
-  },
-  middleName: {
-    type: String,
-    required: true,
-  },
-  lastName: {
-    type: String,
-    required: true,
-  },
-  img: {
-    type: String,
-    required: true,
-  },
+  firstName: requiredTrimStringType,
+  middleName: requiredTrimStringType,
+  lastName: requiredTrimStringType,
+  img: { ...trimStringType, default: null },
+  mailConfirmationRequest: trimStringType,
+  resetPasswordRequest: { ...trimStringType, default: null },
 })
 
 module.exports = model('User', schema)

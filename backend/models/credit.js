@@ -10,7 +10,7 @@ const schema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    isRequired: true,
+    required: true,
   },
   products: [
     {
