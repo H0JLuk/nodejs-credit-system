@@ -3,7 +3,7 @@ const isValidEmail = (email) => {
   return re.test(email)
 }
 
-const isValidUsername = (name) => name.length >= 3
+const isValidUsername = (name) => /^[A-Za-z]{3,}$/.test(name)
 
 const isValidPassword = (password) =>
   /^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/.test(password)
