@@ -1,6 +1,6 @@
 const { comparePasswords, hashPassword, signAccessToken, generateUnicCode } = require('../helpers')
 const { sendEmailConfirmation, sendResetPasswordRequest } = require('../helpers/nodemailer')
-const User = require('../models/user')
+const User = require('../models/User')
 
 const authService = {}
 
@@ -44,7 +44,6 @@ authService.registration = async ({ email, password, firstName, middleName, last
 
 authService.submitEmail = async ({ email, confirmationCode }) => {
   const user = await User.findOne({ email })
-  console.log('here')
 
   if (!user) throw { code: 400, message: 'Invalid email' }
   if (user.isSubmittedEmail) throw { code: 400, message: 'Email already confirmed' }
@@ -69,8 +68,8 @@ authService.resetPasswordRequest = async ({ email }) => {
 
 authService.resetPasswordConfirm = async ({ email, confirmationCode, password }) => {
   const data = await User.findOneAndUpdate(
-    { email, mailConfirmationRequest: confirmationCode },
-    { password: await hashPassword(password), mailConfirmationRequest: null }
+    { email, resetPasswordRequest: confirmationCode },
+    { password: await hashPassword(password), resetPasswordRequest: null }
   )
 
   if (!data) {
